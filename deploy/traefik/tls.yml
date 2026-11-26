@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /certs/unihub.localhost.pem
+      keyFile: /certs/unihub.localhost-key.pem

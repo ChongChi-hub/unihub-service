@@ -40,6 +40,12 @@ public class UserEntity {
 	@Column(nullable = false, length = 32)
 	private UserStatus status = UserStatus.ACTIVE;
 
+	@Column(name = "department_id")
+	private UUID departmentId;
+
+	@Column(name = "admin_class_id")
+	private UUID adminClassId;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<RoleEntity> roles = new HashSet<>();
@@ -49,6 +55,9 @@ public class UserEntity {
 
 	@Column(name = "updated_at", nullable = false)
 	private Instant updatedAt;
+
+	@Column(name = "deleted_at")
+	private Instant deletedAt;
 
 	@PrePersist
 	void onCreate() {
@@ -113,11 +122,43 @@ public class UserEntity {
 		this.status = status;
 	}
 
+	public UUID getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(UUID departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public UUID getAdminClassId() {
+		return adminClassId;
+	}
+
+	public void setAdminClassId(UUID adminClassId) {
+		this.adminClassId = adminClassId;
+	}
+
 	public Set<RoleEntity> getRoles() {
 		return roles;
 	}
 
 	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
+	}
+
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public Instant getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public Instant getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Instant deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 }

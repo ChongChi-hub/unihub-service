@@ -12,6 +12,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation(libs.bundles.jjwt)
+    implementation(libs.poi.ooxml)
 
     runtimeOnly("org.postgresql:postgresql")
 

@@ -8,11 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, UUID> {
-    Optional<RefreshTokenEntity> findByTokenHash(String tokenHash);
-
-    @Modifying
-    @Query("UPDATE RefreshTokenEntity r SET r.revoked = true WHERE r.userId = :userId AND r.revoked = false")
-    void revokeAllActiveByUserId(UUID userId);
+	Optional<RefreshTokenEntity> findByTokenHash(String tokenHash);
 
 	@Modifying
 	@Query("UPDATE RefreshTokenEntity r SET r.revoked = true WHERE r.userId = :userId AND r.revoked = false")
