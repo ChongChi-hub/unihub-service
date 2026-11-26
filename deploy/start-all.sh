@@ -19,7 +19,7 @@ echo "[1/4] Đang khởi động hạ tầng Docker (Postgres, Redis, RabbitMQ, 
 docker compose --profile infra up -d
 
 echo "[2/4] Đang build các service..."
-./gradlew :services:identity-service:bootJar :services:academic-service:bootJar :services:api-gateway:bootJar --no-daemon -x test
+./gradlew :services:identity-service:bootJar :services:academic-service:bootJar :services:learning-service:bootJar :services:file-service:bootJar :services:api-gateway:bootJar --no-daemon -x test
 
 start_service() {
   local name="$1"
@@ -52,6 +52,8 @@ start_service() {
 echo "[3/4] Đang khởi chạy các service backend..."
 start_service "identity-service" 8081
 start_service "academic-service" 8082
+start_service "learning-service" 8083
+start_service "file-service" 8088
 start_service "api-gateway" 8080
 
 echo "[4/4] Toàn bộ hệ thống Unihub backend đang chạy!"
@@ -59,3 +61,5 @@ echo "  - API Gateway:      http://localhost:8080"
 echo "  - Swagger UI:       http://localhost:8080/swagger-ui.html"
 echo "  - Identity Service: http://localhost:8081"
 echo "  - Academic Service: http://localhost:8082"
+echo "  - Learning Service: http://localhost:8083"
+echo "  - File Service:     http://localhost:8088"

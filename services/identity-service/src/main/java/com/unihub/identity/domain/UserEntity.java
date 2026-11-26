@@ -36,6 +36,9 @@ public class UserEntity {
 	@Column(unique = true, length = 64)
 	private String code;
 
+	@Column(name = "avatar_file_id")
+	private String avatarFileId;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 32)
 	private UserStatus status = UserStatus.ACTIVE;
@@ -112,6 +115,14 @@ public class UserEntity {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getAvatarFileId() {
+		return avatarFileId;
+	}
+
+	public void setAvatarFileId(String avatarFileId) {
+		this.avatarFileId = avatarFileId;
 	}
 
 	public UserStatus getStatus() {

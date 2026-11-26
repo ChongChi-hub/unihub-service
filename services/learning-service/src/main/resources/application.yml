@@ -1,0 +1,23 @@
+server:
+  port: ${LEARNING_SERVICE_PORT:8083}
+
+spring:
+  application:
+    name: learning-service
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/learning_db
+    username: ${POSTGRES_USER:unihub}
+    password: ${POSTGRES_PASSWORD:unihub_local_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
