@@ -1,0 +1,50 @@
+server:
+  port: ${IDENTITY_SERVICE_PORT:8081}
+
+spring:
+  application:
+    name: identity-service
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/identity_db
+    username: ${POSTGRES_USER:unihub}
+    password: ${POSTGRES_PASSWORD:unihub_local_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:unihub_redis_pass}
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+app:
+  jwt:
+    issuer: unihub-identity
+    access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+    private-key-pem: ${JWT_PRIVATE_KEY_PEM:}
+    public-key-pem: ${JWT_PUBLIC_KEY_PEM:}
+  auth:
+    max-failed-attempts: 5
+    lock-duration-seconds: 300
+  seed:
+    enabled: ${SEED_DEFAULT_ADMIN:true}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

@@ -1,0 +1,59 @@
+server:
+  port: ${GATEWAY_PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:unihub_redis_pass}
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - ${WEB_ORIGIN:http://localhost:3000}
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: identity-service
+          uri: ${IDENTITY_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/v1/auth/**,/api/v1/users/**,/api/v1/audit-logs/**,/identity/v3/api-docs
+          filters:
+            - RewritePath=/identity/v3/api-docs,/v3/api-docs
+        - id: academic-service
+          uri: ${ACADEMIC_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/v1/academic/**,/academic/v3/api-docs
+          filters:
+            - RewritePath=/academic/v3/api-docs,/v3/api-docs
+
+app:
+  jwt:
+    public-key-pem: ${JWT_PUBLIC_KEY_PEM:}
+    identity-public-key-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}/api/v1/auth/public-key
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: identity-service
+        url: /identity/v3/api-docs
+      - name: academic-service
+        url: /academic/v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
