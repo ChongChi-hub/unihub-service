@@ -178,4 +178,23 @@ class AuthServiceTest {
 		user.setRoles(Set.of(role));
 		return user;
 	}
+
+	@Test
+	void loginWithGoogleEmailSucceedsWhenAccountExists() {
+		UserEntity user = sampleUser("sv@unihub.edu.vn", "Secret@123", "STUDENT");
+		when(userRepository.findByEmailIgnoreCase("sv@unihub.edu.vn")).thenReturn(Optional.of(user));
+
+		AuthResponse response = authService.loginWithGoogleEmail("sv@unihub.edu.vn");
+
+		assertThat(response.accessToken()).isNotBlank();
+		assertThat(response.user().email()).isEqualTo("sv@unihub.edu.vn");
+	}
+
+	@Test
+	void loginWithGoogleEmailRejectsUnregisteredEmail() {
+		when(userRepository.findByEmailIgnoreCase("unknown@gmail.com")).thenReturn(Optional.empty());
+
+		assertThatThrownBy(() -> authService.loginWithGoogleEmail("unknown@gmail.com")).isInstanceOf(AppException.class)
+				.extracting(e -> ((AppException) e).getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN);
+	}
 }
