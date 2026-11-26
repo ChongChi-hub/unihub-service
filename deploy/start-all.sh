@@ -8,6 +8,13 @@ LOG_DIR="$ROOT_DIR/logs"
 mkdir -p "$PID_DIR" "$LOG_DIR"
 cd "$ROOT_DIR"
 
+if [[ -f "$ROOT_DIR/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$ROOT_DIR/.env"
+  set +a
+fi
+
 echo "[1/4] Đang khởi động hạ tầng Docker (Postgres, Redis, RabbitMQ, MinIO, Mailpit)..."
 docker compose --profile infra up -d
 

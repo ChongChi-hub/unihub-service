@@ -41,7 +41,7 @@ spring:
         - id: identity-service
           uri: ${IDENTITY_SERVICE_URL:http://localhost:8081}
           predicates:
-            - Path=/api/v1/auth/**,/api/v1/users/**,/api/v1/audit-logs/**,/identity/v3/api-docs
+            - Path=/api/v1/auth/**,/api/v1/users/**,/api/v1/audit-logs/**,/oauth2/**,/login/oauth2/**,/identity/v3/api-docs
           filters:
             - RewritePath=/identity/v3/api-docs,/v3/api-docs
         - id: academic-service

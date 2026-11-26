@@ -33,16 +33,16 @@ public class DevDataInitializer implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		String adminEmail = "admin@unihub.edu.vn";
+		String adminEmail = "trongtri21092006@gmail.com";
 		if (userRepository.findByEmailIgnoreCase(adminEmail).isPresent()) {
 			return;
 		}
 		RoleEntity adminRole = roleRepository.findByName("ADMIN")
 				.orElseThrow(() -> new IllegalStateException("ADMIN role not seeded"));
 
-		UserEntity admin = new UserEntity();
+		UserEntity admin = userRepository.findByEmailIgnoreCase("admin@unihub.edu.vn").orElseGet(UserEntity::new);
 		admin.setEmail(adminEmail);
-		admin.setPasswordHash(passwordEncoder.encode("Admin@123"));
+		admin.setPasswordHash(passwordEncoder.encode("123123123"));
 		admin.setFullName("Unihub Administrator");
 		admin.setCode("ADMIN-001");
 		admin.setStatus(UserStatus.ACTIVE);

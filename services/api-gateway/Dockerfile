@@ -4,7 +4,7 @@ WORKDIR /workspace
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY libs ./libs
-COPY services/api-gateway ./services/api-gateway
+COPY services ./services
 
 RUN chmod +x gradlew && ./gradlew :services:api-gateway:bootJar --no-daemon -x test
 

@@ -177,6 +177,21 @@ public class AuthService {
 		refreshTokenRepository.revokeAllActiveByUserId(user.getId());
 	}
 
+	@Transactional
+	public AuthResponse loginWithGoogleEmail(String email) {
+		if (email == null || email.isBlank()) {
+			throw new AppException(ErrorCode.UNAUTHORIZED, "Google account has no verified email");
+		}
+		String normalizedEmail = email.trim().toLowerCase();
+		UserEntity user = userRepository.findByEmailIgnoreCase(normalizedEmail).orElseThrow(
+				() -> new AppException(ErrorCode.FORBIDDEN, "No Unihub account linked to this Google email"));
+
+		if (user.getStatus() != UserStatus.ACTIVE) {
+			throw new AppException(ErrorCode.FORBIDDEN, "Account is locked or inactive");
+		}
+		return issueTokenPair(user);
+	}
+
 	private AuthResponse issueTokenPair(UserEntity user) {
 		String accessToken = jwtService.generateAccessToken(user);
 		String rawRefreshToken = UUID.randomUUID() + "." + UUID.randomUUID();

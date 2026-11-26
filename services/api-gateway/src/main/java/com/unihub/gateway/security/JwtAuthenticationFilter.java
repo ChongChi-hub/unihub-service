@@ -26,8 +26,8 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 	private static final String CORRELATION_HEADER = "X-Correlation-Id";
 	private static final List<String> PUBLIC_PREFIXES = List.of("/api/v1/auth/login", "/api/v1/auth/refresh",
 			"/api/v1/auth/logout", "/api/v1/auth/forgot-password", "/api/v1/auth/reset-password",
-			"/api/v1/auth/public-key", "/actuator/", "/v3/api-docs", "/identity/v3/api-docs", "/academic/v3/api-docs",
-			"/swagger-ui");
+			"/api/v1/auth/public-key", "/oauth2/", "/login/oauth2/", "/actuator/", "/v3/api-docs",
+			"/identity/v3/api-docs", "/academic/v3/api-docs", "/swagger-ui");
 
 	private final PublicKeyProvider publicKeyProvider;
 
