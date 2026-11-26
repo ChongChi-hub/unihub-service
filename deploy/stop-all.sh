@@ -6,7 +6,7 @@ PID_DIR="$ROOT_DIR/.pids"
 cd "$ROOT_DIR"
 
 echo "Đang tắt các service backend Unihub..."
-for name in api-gateway file-service learning-service academic-service identity-service; do
+for name in api-gateway file-service notification-service assessment-service learning-service academic-service identity-service; do
   pid_file="$PID_DIR/$name.pid"
   if [[ -f "$pid_file" ]]; then
     pid="$(cat "$pid_file")"
