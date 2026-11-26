@@ -4,7 +4,7 @@ WORKDIR /workspace
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY libs ./libs
-COPY services/academic-service ./services/academic-service
+COPY services ./services
 
 RUN chmod +x gradlew && ./gradlew :services:academic-service:bootJar --no-daemon -x test
 
