@@ -1,0 +1,2 @@
+# Place mkcert certificates here:
+#   mkcert -cert-file deploy/certs/unihub.localhost.pem -key-file deploy/certs/unihub.localhost-key.pem "*.unihub.localhost" unihub.localhost

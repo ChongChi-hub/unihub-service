@@ -95,7 +95,7 @@ services:
       - unihub-network
 
   mailhog:
-    image: mailhog/mailhog:latest
+    image: axllent/mailpit:latest
     container_name: unihub-mailhog
     profiles: ["infra", "core", "full"]
     ports:

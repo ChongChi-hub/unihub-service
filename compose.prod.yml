@@ -1,0 +1,125 @@
+include:
+  - path: ./docker-compose.yml
+
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: unihub-traefik
+    profiles: ["core", "full"]
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./deploy/traefik:/etc/traefik/dynamic:ro
+      - ./deploy/certs:/certs:ro
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - unihub-network
+
+  identity-service:
+    image: ghcr.io/${GHCR_OWNER:-your-github-username}/unihub-identity-service:${IMAGE_TAG:-latest}
+    container_name: unihub-identity-service
+    profiles: ["core", "full"]
+    environment:
+      IDENTITY_SERVICE_PORT: 8081
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-unihub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-unihub_local_pass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-unihub_redis_pass}
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q UP"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    networks:
+      - unihub-network
+
+  academic-service:
+    image: ghcr.io/${GHCR_OWNER:-your-github-username}/unihub-academic-service:${IMAGE_TAG:-latest}
+    container_name: unihub-academic-service
+    profiles: ["core", "full"]
+    environment:
+      ACADEMIC_SERVICE_PORT: 8082
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-unihub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-unihub_local_pass}
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep -q UP"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    networks:
+      - unihub-network
+
+  api-gateway:
+    image: ghcr.io/${GHCR_OWNER:-your-github-username}/unihub-api-gateway:${IMAGE_TAG:-latest}
+    container_name: unihub-api-gateway
+    profiles: ["core", "full"]
+    environment:
+      GATEWAY_PORT: 8080
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-unihub_redis_pass}
+      IDENTITY_SERVICE_URL: http://identity-service:8081
+      ACADEMIC_SERVICE_URL: http://academic-service:8082
+      WEB_ORIGIN: ${WEB_ORIGIN:-https://unihub.localhost}
+    ports:
+      - "8080:8080"
+    depends_on:
+      identity-service:
+        condition: service_healthy
+      academic-service:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.unihub-api.rule=Host(`api.unihub.localhost`)"
+      - "traefik.http.routers.unihub-api.entrypoints=web,websecure"
+      - "traefik.http.routers.unihub-api.tls=true"
+      - "traefik.http.services.unihub-api.loadbalancer.server.port=8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q UP"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    networks:
+      - unihub-network

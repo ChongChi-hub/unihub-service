@@ -33,10 +33,25 @@ public class EmailService {
 				+ "Mã xác nhận (hiệu lực 15 phút): " + rawToken + "\n" + "Hoặc truy cập: " + webOrigin
 				+ "/reset-password?token=" + rawToken
 				+ "\n\nNếu bạn không yêu cầu thao tác này, vui lòng bỏ qua email này.");
+		sendSafely(message, toEmail);
+	}
+
+	public void sendAdminResetPasswordEmail(String toEmail, String fullName, String temporaryPassword) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(fromAddress);
+		message.setTo(toEmail);
+		message.setSubject("[Unihub] Mật khẩu tài khoản đã được đặt lại");
+		message.setText("Xin chào " + fullName + ",\n\n"
+				+ "Quản trị viên đã đặt lại mật khẩu cho tài khoản Unihub của bạn.\n" + "Mật khẩu tạm thời: "
+				+ temporaryPassword + "\nVui lòng đăng nhập và đổi mật khẩu ngay sau khi truy cập.");
+		sendSafely(message, toEmail);
+	}
+
+	private void sendSafely(SimpleMailMessage message, String toEmail) {
 		try {
 			mailSender.send(message);
 		} catch (Exception ex) {
-			log.warn("Failed to send password reset email to {}: {}", toEmail, ex.getMessage());
+			log.warn("Failed to send email to {}: {}", toEmail, ex.getMessage());
 		}
 	}
 }
