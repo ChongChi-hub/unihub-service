@@ -1,1 +1,2 @@
 com.unihub.common.config.CommonStarterAutoConfiguration
+com.unihub.common.config.FeignCommonAutoConfiguration

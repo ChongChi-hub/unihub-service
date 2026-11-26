@@ -6,11 +6,13 @@ spotless = "7.0.2"
 springdoc = "2.8.5"
 jjwt = "0.12.6"
 poi = "5.4.0"
+awsSdk = "2.30.15"
 
 [libraries]
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 springdoc-openapi-starter-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
+aws-s3 = { module = "software.amazon.awssdk:s3", version.ref = "awsSdk" }
 jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
 jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
 jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }

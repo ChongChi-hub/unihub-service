@@ -1,0 +1,27 @@
+server:
+  port: ${FILE_SERVICE_PORT:8088}
+
+spring:
+  application:
+    name: file-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:unihub_redis_pass}
+
+app:
+  s3:
+    endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+    region: ${S3_REGION:us-east-1}
+    access-key: ${MINIO_ROOT_USER:unihub_minio}
+    secret-key: ${MINIO_ROOT_PASSWORD:unihub_minio_pass}
+    bucket: ${S3_BUCKET:unihub-files}
+    presign-expiration-minutes: 15
+    max-file-size-bytes: 52428800
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

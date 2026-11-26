@@ -41,7 +41,7 @@ spring:
         - id: identity-service
           uri: ${IDENTITY_SERVICE_URL:http://localhost:8081}
           predicates:
-            - Path=/api/v1/auth/**,/api/v1/users/**,/api/v1/audit-logs/**,/oauth2/**,/login/oauth2/**,/identity/v3/api-docs
+            - Path=/api/v1/auth/**,/api/v1/users/**,/api/v1/profile/**,/api/v1/audit-logs/**,/oauth2/**,/login/oauth2/**,/identity/v3/api-docs
           filters:
             - RewritePath=/identity/v3/api-docs,/v3/api-docs
         - id: academic-service
@@ -50,6 +50,18 @@ spring:
             - Path=/api/v1/academic/**,/academic/v3/api-docs
           filters:
             - RewritePath=/academic/v3/api-docs,/v3/api-docs
+        - id: learning-service
+          uri: ${LEARNING_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/learning/**,/api/v1/assignments/**,/learning/v3/api-docs
+          filters:
+            - RewritePath=/learning/v3/api-docs,/v3/api-docs
+        - id: file-service
+          uri: ${FILE_SERVICE_URL:http://localhost:8088}
+          predicates:
+            - Path=/api/v1/files/**,/file/v3/api-docs
+          filters:
+            - RewritePath=/file/v3/api-docs,/v3/api-docs
 
 app:
   jwt:
