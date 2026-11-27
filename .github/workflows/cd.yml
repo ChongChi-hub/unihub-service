@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        service: [api-gateway, identity-service, academic-service, learning-service, assessment-service, notification-service, file-service]
+        service: [api-gateway, identity-service, academic-service, learning-service, assessment-service, notification-service, report-service, ai-service, file-service]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
