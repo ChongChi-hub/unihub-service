@@ -1,0 +1,30 @@
+server:
+  port: ${AI_SERVICE_PORT:8087}
+
+spring:
+  application:
+    name: ai-service
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/ai_db
+    username: ${POSTGRES_USER:unihub}
+    password: ${POSTGRES_PASSWORD:unihub_local_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+app:
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    base-url: https://generativelanguage.googleapis.com/v1beta
+    chat-model: ${GEMINI_CHAT_MODEL:gemini-2.0-flash}
+    embedding-model: ${GEMINI_EMBEDDING_MODEL:text-embedding-004}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

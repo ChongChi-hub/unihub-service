@@ -19,7 +19,7 @@ echo "[1/4] Đang khởi động hạ tầng Docker (Postgres, Redis, RabbitMQ, 
 docker compose --profile infra up -d
 
 echo "[2/4] Đang build các service..."
-./gradlew :services:identity-service:bootJar :services:academic-service:bootJar :services:learning-service:bootJar :services:assessment-service:bootJar :services:notification-service:bootJar :services:file-service:bootJar :services:api-gateway:bootJar --no-daemon -x test
+./gradlew :services:identity-service:bootJar :services:academic-service:bootJar :services:learning-service:bootJar :services:assessment-service:bootJar :services:notification-service:bootJar :services:report-service:bootJar :services:ai-service:bootJar :services:file-service:bootJar :services:api-gateway:bootJar --no-daemon -x test
 
 start_service() {
   local name="$1"
@@ -55,6 +55,8 @@ start_service "academic-service" 8082
 start_service "learning-service" 8083
 start_service "assessment-service" 8084
 start_service "notification-service" 8085
+start_service "report-service" 8086
+start_service "ai-service" 8087
 start_service "file-service" 8088
 start_service "api-gateway" 8080
 
